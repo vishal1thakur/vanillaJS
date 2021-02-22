@@ -1,4 +1,8 @@
+/* Press start 2p font */
+
 @import url("https://fonts.googleapis.com/css?family=Press+Start+2P&display=swap");
+
+/* Remove all default styling */
 
 * {
   margin: 0;
@@ -10,6 +14,8 @@ html {
   font-size: 62.5%;
   box-sizing: border-box;
 }
+
+/* Body Styling */
 
 body {
   font-family: "Press Start 2P", sans-serif;
