@@ -120,18 +120,40 @@ function removeTask(e) {
       // Remove the elements parents parent => entire list entry
       e.target.parentElement.parentElement.remove();
 
-      // 2b) Remove from local stroage
+      // 2b) Remove from local storage
       removeTaskFromLocalStorage(e.target.parentElement.parentElement);
     }
   }
 }
 
 // 2b) Remove from local stroage - function
-function removeTaskFromLocalStorage(task) {}
+function removeTaskFromLocalStorage(taskItem) {
+  // Creat a tasks array
+  let tasks;
+  // If there is no taks already, create an empty array
+  if (localStorage.getItem('tasks') === null) {
+    tasks = [];
+  } else {
+    // Get the tasks array from the local storage
+    // Storage only contains strings, so parse to array
+    tasks = JSON.parse(localStorage.getItem('tasks'));
+  }
+
+  // Delete task if it is present in tasks
+  tasks.forEach(function (task, index) {
+    if (taskItem.textContent === task) {
+      // Remove 1 item from the given index
+      tasks.splice(index, 1);
+    }
+  });
+
+  // Set the back the local storage
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
 
 // 3) Clear Task Event - All
 function clearTasks() {
-  // Method 1 - This is slower
+  // 3a) Method 1 - This is slower
   // taskList.innerHTML = '';
   // Method 2 - This is faster (jsperform)
   // Ask confirmation
@@ -140,7 +162,16 @@ function clearTasks() {
     while (taskList.firstChild) {
       taskList.removeChild(taskList.firstChild);
     }
+
+    // 3b) Remove from local storage
+    clearTasksFromLocalStorage();
   }
+}
+
+// 3b) Remove from local storage - function
+function clearTasksFromLocalStorage() {
+  // Clear the entire local storage
+  localStorage.clear();
 }
 
 // 4) Filter Tasks
