@@ -9,7 +9,7 @@ const taskInput = document.querySelector('#task');
 
 loadEventListeners();
 
-//------------- B) All event listeners Function ----
+//------------- B) All event listeners Function ---------
 
 function loadEventListeners() {
   // 1) Add task event
@@ -18,6 +18,8 @@ function loadEventListeners() {
   taskList.addEventListener('click', removeTask);
   // 3) Clear Task Event - All
   clearBtn.addEventListener('click', clearTasks);
+  // 4) Filter Task Events
+  filter.addEventListener('keyup', filterTasks);
 }
 
 //-------------- C) Callback functions ------------------
@@ -76,4 +78,26 @@ function clearTasks() {
       taskList.removeChild(taskList.firstChild);
     }
   }
+}
+
+// 4) Filter Tasks
+function filterTasks(e) {
+  // Assing value being entere to text
+  const text = e.target.value.toLowerCase();
+  // ForEach for all the entries in the list
+  document.querySelectorAll('.collection-item').forEach(
+    // Create function to check each task to the entered value
+    function (task) {
+      // Assign the list items to a variable
+      const item = task.firstChild.textContent;
+      // if item is = to indexof text => display - block
+      // -1 returns no match
+      if (item.toLowerCase().indexOf(text) != -1) {
+        task.style.display = 'block';
+      } else {
+        // else display - none
+        task.style.display = 'none';
+      }
+    }
+  );
 }
