@@ -12,6 +12,8 @@ loadEventListeners();
 //------------- B) All event listeners Function ---------
 
 function loadEventListeners() {
+  // 0) DOM Load Event
+  document.addEventListener('DOMContentLoaded', getTasks);
   // 1) Add task event
   form.addEventListener('submit', addTask);
   // 2) Remove task event
@@ -24,14 +26,47 @@ function loadEventListeners() {
 
 //-------------- C) Callback functions ------------------
 
+// 0) Add Tasks when DOM is loaded
+function getTasks() {
+  // Creat a tasks array
+  let tasks;
+  // If there is no taks already, create an empty array
+  if (localStorage.getItem('tasks') === null) {
+    tasks = [];
+  } else {
+    // Get the tasks array from the local storage
+    // Storage only contains strings, so parse to array
+    tasks = JSON.parse(localStorage.getItem('tasks'));
+  }
+
+  tasks.forEach(function (task) {
+    // Create li element
+    const li = document.createElement('li');
+    // Add class
+    li.className = 'collection-item';
+    // Create a text node on li and append
+    li.appendChild(document.createTextNode(task));
+    // Create a new link element
+    const link = document.createElement('a');
+    // Add class
+    link.className = 'delete-item secondary-content';
+    // Add icon html
+    link.innerHTML = '<i class="fa fa-remove"></i>';
+    // Append link to li
+    li.appendChild(link);
+    // Append li to ul
+    taskList.appendChild(li);
+  });
+}
+
 // 1) Add Task
 function addTask(e) {
-  // For empty entry
+  // 1a) For empty entry
   if (taskInput.value === '') {
     alert('Add a Task');
   }
 
-  // For a new entry
+  // 1b) For a new entry
   // Create li element
   const li = document.createElement('li');
   // Add class
@@ -48,23 +83,51 @@ function addTask(e) {
   li.appendChild(link);
   // Append li to ul
   taskList.appendChild(li);
+
+  // 1c) Add entry to local storage - call
+  storeTaskInLocalStorage(taskInput.value);
+
   // Clear Task field
   taskInput.value = '';
 
   e.preventDefault();
 }
 
+// 1c) Add entry to local storage - function
+function storeTaskInLocalStorage(task) {
+  // Creat a tasks array
+  let tasks;
+  // If there is no taks already, create an empty array
+  if (localStorage.getItem('tasks') === null) {
+    tasks = [];
+  } else {
+    // Get the tasks array from the local storage
+    // Storage only contains strings, so parse to array
+    tasks = JSON.parse(localStorage.getItem('tasks'));
+  }
+  // push the new task into tasks
+  tasks.push(task);
+  // Set it in the local storage while converting into a string
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
 // 2) Remove Task
 function removeTask(e) {
-  // Event delegation - if the element being clicked (X icon) contains a parent element with class 'delete-item' => link
+  // 2a) Event delegation - if the element being clicked (X icon) contains a parent element with class 'delete-item' => link
   if (e.target.parentElement.classList.contains('delete-item')) {
     // Show a confirmation window
     if (confirm('Do you want to remove this entry?')) {
       // Remove the elements parents parent => entire list entry
       e.target.parentElement.parentElement.remove();
+
+      // 2b) Remove from local stroage
+      removeTaskFromLocalStorage(e.target.parentElement.parentElement);
     }
   }
 }
+
+// 2b) Remove from local stroage - function
+function removeTaskFromLocalStorage(task) {}
 
 // 3) Clear Task Event - All
 function clearTasks() {
