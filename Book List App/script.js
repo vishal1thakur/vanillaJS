@@ -26,7 +26,34 @@ UI.prototype.addBookToList = function (book) {
   list.appendChild(row);
 };
 
-// 2c) Clear fields
+// 2c) Show alert
+UI.prototype.showAlert = function (message, className) {
+  // Create an empty div
+  const div = document.createElement('div');
+  // Add class on div
+  div.className = `alert ${className}`;
+  // Add a text node to div
+  div.appendChild(document.createTextNode(message));
+  // Get container
+  const container = document.querySelector('.container');
+  // Get form
+  const form = document.querySelector('#book-form');
+  // insert div before form
+  container.insertBefore(div, form);
+  // Make the alert dissapear after 3 seconds
+  setTimeout(function () {
+    document.querySelector('.alert').remove();
+  }, 3000);
+};
+
+// 2d) Delete Book
+UI.prototype.deleteBook = function (target) {
+  if (target.className === 'delete') {
+    target.parentElement.parentElement.remove();
+  }
+};
+
+// 2d) Clear fields
 UI.prototype.clearFields = function () {
   document.getElementById('title').value = '';
   document.getElementById('author').value = '';
@@ -34,7 +61,7 @@ UI.prototype.clearFields = function () {
 };
 
 // ------------------B) Event Listeners-----------------
-//Submit Listener
+// 1) Add Book - Submit Listener
 document.getElementById('book-form').addEventListener('submit', function (e) {
   // Get entered values
   const title = document.getElementById('title').value;
@@ -47,11 +74,30 @@ document.getElementById('book-form').addEventListener('submit', function (e) {
   // Instantiate UI
   const ui = new UI();
 
-  // Add book to list
-  ui.addBookToList(book);
+  // Validate
+  if (title === '' || author === '' || isbn === '') {
+    // Error alert
+    ui.showAlert('Please fill in all the fields', 'error');
+  } else {
+    // Add book to list
+    ui.addBookToList(book);
+    // Show success
+    ui.showAlert('Book Added!', 'success');
+    // Clear fields
+    ui.clearFields();
+  }
 
-  // Clear fields
-  ui.clearFields();
+  e.preventDefault();
+});
+
+// 2) Remove book entry (X)
+document.getElementById('book-list').addEventListener('click', function (e) {
+  // Instantiate UI
+  const ui = new UI();
+  // Remove book entry
+  ui.deleteBook(e.target);
+  // Show alert
+  ui.showAlert('Book Removed!', 'success');
 
   e.preventDefault();
 });
