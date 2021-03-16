@@ -28,8 +28,21 @@ const data = {
 };
 
 // ii) Create Post
-http.post(
-  'http://jsonplaceholder.typicode.com/posts',
+// http.post(
+//   'http://jsonplaceholder.typicode.com/posts',
+//   data,
+//   function (err, post) {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       console.log(post);
+//     }
+//   }
+// );
+
+// 3) PUT (Update)
+http.put(
+  'http://jsonplaceholder.typicode.com/posts/1',
   data,
   function (err, post) {
     if (err) {
