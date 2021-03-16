@@ -53,7 +53,7 @@ UI.prototype.deleteBook = function (target) {
   }
 };
 
-// 2d) Clear fields
+// 2e) Clear fields
 UI.prototype.clearFields = function () {
   document.getElementById('title').value = '';
   document.getElementById('author').value = '';
