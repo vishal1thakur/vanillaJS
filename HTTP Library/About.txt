@@ -1,0 +1,2 @@
+A JS library to shorten the AJAX requests liek GET, POST, PUT & DELETE
+for reference and cleaner syntax.

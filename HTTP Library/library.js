@@ -1,8 +1,10 @@
+//------------- A) Create Object -------------------
 function easyHTTP() {
   this.http = new XMLHttpRequest();
 }
 
-// Make an HTTP GET Request
+// ------------- B) The Requests --------------------
+// 1) Make an HTTP GET Request
 easyHTTP.prototype.get = function (url, callback) {
   this.http.open('GET', url, true);
 
@@ -18,8 +20,20 @@ easyHTTP.prototype.get = function (url, callback) {
   this.http.send();
 };
 
-// Make an HTTP POST Request
+//2) Make an HTTP POST Request
+easyHTTP.prototype.post = function (url, data, callback) {
+  this.http.open('POST', url, true);
+  // Define data type
+  this.http.setRequestHeader('Content-type', 'application/json');
 
-// Make an HTTP PUT Request
+  let self = this;
+  this.http.onload = function () {
+    callback(null, self.http.responseText);
+  };
 
-// Make an HTTP DELETE Request
+  this.http.send(JSON.stringify(data));
+};
+
+//3) Make an HTTP PUT Request
+
+//4) Make an HTTP DELETE Request
