@@ -31,4 +31,41 @@ class UI {
     `;
     console.log(user.avatar_url);
   }
+
+  // Show alert message
+  showAlert(message, className) {
+    // Clear any remaining alerts
+    this.clearAlert();
+    // Create a div
+    const div = document.createElement('div');
+    // Add classes
+    div.className = className;
+    // Add text
+    div.appendChild(document.createTextNode(message));
+    // Get parent
+    const container = document.querySelector('.searchContainer');
+    // Get search box
+    const search = document.querySelector('.search');
+    // Insert alert
+    container.insertBefore(div, search);
+
+    // Timeout after 3 seconds
+    setTimeout(() => {
+      this.clearAlert();
+    }, 3000);
+  }
+
+  // Clear alert message
+  clearAlert() {
+    const currentAlert = document.querySelector('.alert');
+
+    if (currentAlert) {
+      currentAlert.remove();
+    }
+  }
+
+  // Clear profile when backspaced
+  clearProfile() {
+    this.profile.innerHTML = '';
+  }
 }
