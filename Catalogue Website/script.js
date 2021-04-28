@@ -86,6 +86,45 @@ function animateSlides() {
 }
 
 // B) Cursor Animation
+// Select the div to display where the mouse moves
+let mouse = document.querySelector('.cursor');
+// Select the span of the explore to add action - TAP
+let mouseTxt = mouse.querySelector('span');
+
+function cursor(e) {
+  // attach the circle div to the position of the mouse - e is 'mousemove'
+  mouse.style.top = e.pageY + 'px';
+  mouse.style.left = e.pageX + 'px';
+}
+
+function activeCursor(e) {
+  // Get the target of the event
+  const item = e.target;
+  // Filter out only the link or burger
+  if (item.id === 'logo' || item.classList.contains('burger')) {
+    // Add styling
+    mouse.classList.add('nav-active');
+  } else {
+    // Remove styling
+    mouse.classList.remove('nav-active');
+  }
+  // Filter out the explore button
+  if (item.classList.contains('explore')) {
+    mouse.classList.add('explore-active');
+    gsap.to('.title-swipe', 1, {y: '0%'});
+    mouseTxt.innerText = 'Tap';
+  } else {
+    mouse.classList.remove('explore-active');
+    gsap.to('.title-swipe', 1, {y: '100%'});
+
+    mouseTxt.innerText = '';
+  }
+}
+
+// For when the mouse moves anywhere
+window.addEventListener('mousemove', cursor);
+// For when the mouse hovers over links
+window.addEventListener('mouseover', activeCursor);
 
 // Call the functions
 animateSlides();
