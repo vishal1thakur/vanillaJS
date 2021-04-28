@@ -1,61 +1,91 @@
+// A) Scroll Animations
+// Initialize screen variables
 let controller;
 let slideScene;
 let pageScene;
 
+// Animate function
 function animateSlides() {
   // Init Controller
   controller = new ScrollMagic.Controller();
-  // Select
+  // Select elements
   const sliders = document.querySelectorAll('.slide');
   const nav = document.querySelector('.nav-header');
   // Loop over each slide
   sliders.forEach((slide, index, slides) => {
+    // select children
     const revealImg = slide.querySelector('.reveal-img');
     const img = slide.querySelector('img');
     const revealText = slide.querySelector('.reveal-text');
     // GSAP
+    // 1. Timeline for image and text animation
     const slideTl = gsap.timeline({
       defaults: {duration: 1, ease: 'power2.inOut'},
     });
+    // Reveal the image div
     slideTl.fromTo(revealImg, {x: '0%'}, {x: '100%'});
-    slideTl.fromTo(img, {scale: 2}, {scale: 1}, '-=1');
+    // Scale and reveal the hero image
+    slideTl.fromTo(img, {opacity: 0, scale: 2}, {opacity: 1, scale: 1}, '-=1');
+    // Reveal the text
     slideTl.fromTo(revealText, {x: '0%'}, {x: '100%'}, '-=0.9');
+    // Slide down the Nav
     slideTl.fromTo(nav, {y: '-100%'}, {y: '0%'}), '-=0.5';
     // Create Scene
+    // Set trigger areas on the screen
     slideScene = new ScrollMagic.Scene({
+      // Set the element for trigger slider context
       triggerElement: slide,
+      // Length of the trigger from top the screen
       triggerHook: 0.25,
+      // Undo reverse animation on scroll up
       reverse: false,
     })
+      // Attach with GSAP timeline animation
       .setTween(slideTl)
+      // Add markups for reference
       .addIndicators({
         colorStart: 'white',
         colorTrigger: 'white',
         name: 'slide',
       })
+      // Connect to the controller initialized
       .addTo(controller);
-    // New animation
+    // 2. Timeline for section sliding on scroll
     const pageTl = gsap.timeline();
+    // To stop the covering and immediately get the next slide - select the next slide and push it up
+    // select the next, if its the last end
     let nextSlide = slides.length - 1 === index ? 'end' : slides[index + 1];
+    // push it up
     pageTl.fromTo(nextSlide, {y: '0%'}, {y: '50%'});
+    // animation for the slide
     pageTl.fromTo(slide, {opacity: 1, scale: 1}, {opacity: 0, scale: 0});
+    // animation for the next slide pushing up
     pageTl.fromTo(nextSlide, {y: '50%'}, {y: '0%'}, '-=0.5');
-    // Create new scene
+    // Create scene
+    // Trigger for the animation
     pageScene = new ScrollMagic.Scene({
+      // attach the animated element
       triggerElement: slide,
+      // set with of the screen
       duration: '100%',
+      // set trigger location
       triggerHook: 0,
     })
+      // indicators for reference
       .addIndicators({
         colorStart: 'white',
         colorTrigger: 'white',
         name: 'page',
         indent: 200,
       })
+      // Attach with GSAP & undo effect on scroll up
       .setPin(slide, {pushFollowers: false})
       .setTween(pageTl)
       .addTo(controller);
   });
 }
 
+// B) Cursor Animation
+
+// Call the functions
 animateSlides();
