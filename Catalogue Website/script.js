@@ -87,9 +87,11 @@ function animateSlides() {
 
 // B) Cursor Animation
 // Select the div to display where the mouse moves
-let mouse = document.querySelector('.cursor');
+const mouse = document.querySelector('.cursor');
 // Select the span of the explore to add action - TAP
-let mouseTxt = mouse.querySelector('span');
+const mouseTxt = mouse.querySelector('span');
+// Select the burger for toggling line on hover
+const burger = document.querySelector('.burger');
 
 function cursor(e) {
   // attach the circle div to the position of the mouse - e is 'mousemove'
@@ -121,10 +123,34 @@ function activeCursor(e) {
   }
 }
 
+// Burger toggle
+function navToggle(e) {
+  if (!e.target.classList.contains('active')) {
+    e.target.classList.add('active');
+    // Animate lines
+    gsap.to('.line1', 0.5, {rotate: '45', y: 5, background: 'black'});
+    gsap.to('.line2', 0.5, {rotate: '-45', y: -5, background: 'black'});
+    gsap.to('.navbar', 1, {clipPath: 'circle(2500px at 100% -10%)'});
+    gsap.to('#logo', 1, {color: 'black'});
+    document.body.classList.add('hide');
+  } else {
+    e.target.classList.remove('active');
+    // Animate lines
+    gsap.to('.line1', 0.5, {rotate: '0', y: 0, background: 'white'});
+    gsap.to('.line2', 0.5, {rotate: '0', y: 0, background: 'white'});
+    gsap.to('.navbar', 1, {clipPath: 'circle(50px at 100% -10%)'});
+    gsap.to('#logo', 1, {color: 'white'});
+    document.body.classList.remove('hide');
+  }
+}
+
+// Event Listeners
 // For when the mouse moves anywhere
 window.addEventListener('mousemove', cursor);
 // For when the mouse hovers over links
 window.addEventListener('mouseover', activeCursor);
+// For toggling lines of burger
+window.addEventListener('click', navToggle);
 
 // Call the functions
 animateSlides();
