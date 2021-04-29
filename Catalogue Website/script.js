@@ -100,26 +100,20 @@ function cursor(e) {
 }
 
 function activeCursor(e) {
-  // Get the target of the event
   const item = e.target;
-  // Filter out only the link or burger
   if (item.id === 'logo' || item.classList.contains('burger')) {
-    // Add styling
     mouse.classList.add('nav-active');
   } else {
-    // Remove styling
     mouse.classList.remove('nav-active');
   }
-  // Filter out the explore button
   if (item.classList.contains('explore')) {
     mouse.classList.add('explore-active');
     gsap.to('.title-swipe', 1, {y: '0%'});
     mouseTxt.innerText = 'Tap';
   } else {
     mouse.classList.remove('explore-active');
-    gsap.to('.title-swipe', 1, {y: '100%'});
-
     mouseTxt.innerText = '';
+    gsap.to('.title-swipe', 1, {y: '100%'});
   }
 }
 
@@ -144,6 +138,70 @@ function navToggle(e) {
   }
 }
 
+// BArba Page TRansitions
+const logo = document.querySelector('#logo');
+barba.init({
+  views: [
+    {
+      namespace: 'home',
+      beforeEnter() {
+        // Call the functions
+        animateSlides();
+        logo.href = './index.html';
+      },
+      beforeLeave() {
+        // Dont carry the animation on the next page
+        slideScene.destroy();
+        pageScene.destroy();
+        controller.destroy();
+      },
+    },
+    {
+      namespace: 'fashion',
+      beforeEnter() {
+        logo.href = '../index.html';
+        gsap.fromTo(
+          '.nav-header',
+          1,
+          {y: '100%'},
+          {y: '0%', ease: 'power2.inOut'}
+        );
+      },
+    },
+  ],
+  transitions: [
+    {
+      leave({current, next}) {
+        let done = this.async();
+        //Scroll to the top
+        windows.scrollTo(0, 0);
+        // Animation
+        const tl = gsap.timeline({defaults: {ease: 'power2.inOut'}});
+        tl.fromTo(
+          current.container,
+          1,
+          {opacity: 1},
+          {opacity: 0, onComplete: done}
+        );
+        tl.fromTo('.swipe', 0.75, {x: '-100%'}, {x: '0%', onComplete: done});
+        ('-=0.5');
+      },
+      enter({current, next}) {
+        let done = this.async();
+        // Animation
+        const tl = gsap.timeline({defaults: {ease: 'power2.inOut'}});
+        tl.fromTo(
+          '.swipe',
+          1,
+          {x: '0%'},
+          {x: '100%', stagger: 0.25, onComplete: done}
+        );
+        tl.fromTo(next.container, 1, {opacity: 0}, {opacity: 1});
+      },
+    },
+  ],
+});
+
 // Event Listeners
 // For when the mouse moves anywhere
 window.addEventListener('mousemove', cursor);
@@ -151,6 +209,3 @@ window.addEventListener('mousemove', cursor);
 window.addEventListener('mouseover', activeCursor);
 // For toggling lines of burger
 window.addEventListener('click', navToggle);
-
-// Call the functions
-animateSlides();
