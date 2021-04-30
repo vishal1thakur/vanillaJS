@@ -35,7 +35,7 @@ function animateSlides() {
       // Set the element for trigger slider context
       triggerElement: slide,
       // Length of the trigger from top the screen
-      triggerHook: 0.25,
+      triggerHook: 0.5,
       // Undo reverse animation on scroll up
       reverse: false,
     })
