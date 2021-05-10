@@ -5,7 +5,7 @@
 }
 
 body {
-  background-image: linear-gradient(120deg, #caab43, #df795c);
+  background-image: linear-gradient(120deg, #539ea8, #01498db6);
   color: white;
   font-family: 'Montserrat', sans-serif;
   min-height: 100vh;
@@ -21,6 +21,12 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@media only screen and (max-width: 600px) {
+  form {
+    flex-direction: column;
+  }
 }
 
 form input,
